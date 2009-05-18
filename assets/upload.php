@@ -31,7 +31,10 @@ if (!empty($_FILES)) {
 	// Uncomment the following line if you want to make the directory if it doesn't exist
 	// mkdir(str_replace('//','/',$targetPath), 0755, true);
 	
-	move_uploaded_file($tempFile,$targetFile);
+	if (move_uploaded_file($tempFile,$targetFile)) {
+		echo "1";
+	} else {
+		echo "0";
+	}
 }
-echo "1";
 ?>
