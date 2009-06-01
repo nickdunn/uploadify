@@ -34,6 +34,8 @@
 				// if the generated HTML contains a file upload element
 				foreach($xpath->query("//*[name()='input' and @type='file']") as $file) {
 					
+					$fields[$field->get('element_name')]['section'] = $_GET['section'];
+					$fields[$field->get('element_name')]['field_id'] = $field->get('id');
 					$fields[$field->get('element_name')]['handle'] = $field->get('element_name');
 					$fields[$field->get('element_name')]['destination'] = $field->get('destination');
 					
@@ -59,6 +61,7 @@
 			}
 			
 			echo 'var upload_fields = ', json_encode($fields), ";\n";
+			echo 'var PHPSESSID = "', session_id(), "\";\n";
 			exit;
 		}
 	}

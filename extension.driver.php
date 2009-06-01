@@ -31,8 +31,7 @@
 		public function initaliseAdminPageHead($context) {
 			$page = $context['parent']->Page;
 			
-			if ($page instanceof ContentPublish and ($page->_context['page'] == 'new' || $page->_context['page'] == 'edit')) {			
-				$page->addScriptToHead(URL . '/assets/js/jquery.js', 101);
+			if ($page instanceof ContentPublish and ($page->_context['page'] == 'new' || $page->_context['page'] == 'edit')) {
 				$page->addStylesheetToHead(URL . '/extensions/uploadify/assets/uploadify.css', 'screen', 991);
 				$page->addScriptToHead(URL . '/extensions/uploadify/assets/jquery.uploadify.js', 992);
 				$page->addScriptToHead(URL . '/symphony/extension/uploadify/upload_fields/?section=' . $page->_context['section_handle'], 993);
