@@ -1,9 +1,9 @@
 # Uploadify
 
-Version: 0.3
-Author: Nick Dunn <http://github.com/nickdunn/>
-Build Date: 2009-06-01
-Requirements: Symphony 2.0.2 (with jQuery 1.3)
+* Version: 0.3
+* Author: Nick Dunn <http://github.com/nickdunn/>
+* Build Date: 2009-06-01
+* Requirements: Symphony 2.0.2 (with jQuery 1.3)
 
 ## Installation
 
