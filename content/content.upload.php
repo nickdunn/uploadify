@@ -27,8 +27,6 @@
 				if ($field->get('id') == $field_id) $upload_field = $field;
 			}
 			
-			$error = false;
-			
 			if (!$upload_field) die('0|Invalid Field ID');
 			
 			$status = $upload_field->checkPostFieldData($_FILES['Filedata'], $message);
