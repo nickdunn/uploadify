@@ -11,16 +11,19 @@
 			$this->_driver = $this->_Parent->ExtensionManager->create('uploadify');
 		}
 		
+		/*
+		Returns JSON encoded meta data for any upload fields in this section.
+		*/		
 		public function __viewIndex() {
 			header('content-type: text/javascript');
 			
 			$sm = new SectionManager($this->_Parent);
-			$section_id = $sm->fetchIDFromHandle($_GET['section']);
-			$section = $sm->fetch($section_id);
+			$section = $sm->fetch($sm->fetchIDFromHandle($_GET['section']));
 			$fields = array();
 			
 			foreach ($section->fetchFilterableFields() as $field) {
 				
+				// create the backend HTML representation of this field
 				$html = new XMLElement('html');
 				$field->displayPublishPanel($html);
 				
@@ -29,30 +32,31 @@
 				
 				$xpath = new DomXPath($dom);
 				
-				$count = 0;
-				
 				// if the generated HTML contains a file upload element
-				foreach($xpath->query("//*[name()='input' and @type='file']") as $file) {
+				foreach($xpath->query("//input[@type='file']") as $file) {
 					
 					$fields[$field->get('element_name')]['section'] = $_GET['section'];
 					$fields[$field->get('element_name')]['field_id'] = $field->get('id');
 					$fields[$field->get('element_name')]['handle'] = $field->get('element_name');
 					$fields[$field->get('element_name')]['destination'] = $field->get('destination');
 					
-					// if a validator regular expression has been set we need to parse and explode into Uploadify syntax
+					// if a validator regular expression has been set we need to parse and explode into
+					// a format that Uploadify understands (semi-colon delimeted string)
 					if ($field->get('validator')) {
 						$validator = str_replace('$/i', '', $field->get('validator'));
 						$validator = trim($validator, '():?[]\/.');
 						$validator = explode('|', $validator);
 						foreach ($validator as $type) {
 							if ($type == 'jpe?g') {
-							$fields[$field->get('element_name')]['types'] .= '*.jpg;*.jpeg;';
+								$fields[$field->get('element_name')]['types'] .= '*.jpg;*.jpeg;';
 							} else {
 								$fields[$field->get('element_name')]['types'] .= '*.' . $type . ';';
 							}
 						}
 						$fields[$field->get('element_name')]['types'] = trim($fields[$field->get('element_name')]['types'], ';');
-					} else {
+					}
+					// if no validation rule, allow all file types
+					else {
 						$fields[$field->get('element_name')]['types'] = '*.*';
 					}
 					
