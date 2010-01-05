@@ -23,8 +23,10 @@
 			var upload_destination = '';
 			var section = '';
 			var field_id = '';
+			
+			// find this field's meta data from the JSON feed of upload fields
 			for(var field in upload_fields) {
-				if ('fields[' + upload_fields[field].handle + ']' == input.attr('name')) {
+				if (input.attr('name') == 'fields[' + upload_fields[field].handle + ']') {
 					upload_file_types = upload_fields[field].types;
 					upload_destination = upload_fields[field].destination;
 					section_id = upload_fields[field].section;
@@ -34,12 +36,23 @@
 
 			var required = false;
 			if ($(this).find('i').length == 0) required = true;
-
+			
+			// add uploadify container inside this field's HTML
 			file.append('<div class="uploadify" id="uploadify-' + i + '"></div>');
+
+			var root = $('h1:first a').attr('href');
+			root = root.replace(/http:\/\//, '');
+			root_split = root.split('/');
+			root = '/';
+			for(var j = 1; j < root_split.length; j++) {
+				if (root_split[j] != '') root += root_split[j] + '/';
+			}
+			
+			// then immediately select and apply the uploadify plugin to it
 			$('#uploadify-' + i).fileUpload({ 
 
-				'uploader': '/extensions/uploadify/assets/uploader.swf',
-				'script': '/symphony/extension/uploadify/upload/',
+				'uploader': root + 'extensions/uploadify/assets/uploader.swf',
+				'script': root + 'symphony/extension/uploadify/upload/',
 
 				'folder': upload_destination,
 				'fileExt': upload_file_types,
@@ -52,7 +65,7 @@
 					'field': field_id
 				},
 				
-				'buttonImg': '/extensions/uploadify/assets/choose.png',
+				'buttonImg': root + 'extensions/uploadify/assets/choose.png',
 				'width': 68,
 				'height': 15,
 				'wmode': 'transparent',
@@ -182,28 +195,28 @@
 
 		});
 
-		function wrapFormElementWithError(element, message) {
-			var parent = element.parent();
-			if (parent.hasClass('invalid')) {
-				parent.find('p').html(message);
+	function wrapFormElementWithError(element, message) {
+		var parent = element.parent();
+		if (parent.hasClass('invalid')) {
+			parent.find('p').html(message);
+		} else {
+			if (parent.hasClass('was-invalid')) {
+				parent.attr('class', 'invalid');
 			} else {
-				if (parent.hasClass('was-invalid')) {
-					parent.attr('class', 'invalid');
-				} else {
-					element.wrap('<div class="invalid"></div>');
-				}
-				element.after('<p class="message">' + message + '</p>');
+				element.wrap('<div class="invalid"></div>');
 			}
+			element.after('<p class="message">' + message + '</p>');
 		}
+	}
 
-		function removeElementError(element) {
-			var field = $(element).parents('.field');
-			var invalid = $(field).find('.invalid');
-			if (invalid.length) {
-				invalid.attr('class', 'was-invalid');
-				invalid.find('p.message').remove();
-			}
+	function removeElementError(element) {
+		var field = $(element).parents('.field');
+		var invalid = $(field).find('.invalid');
+		if (invalid.length) {
+			invalid.attr('class', 'was-invalid');
+			invalid.find('p.message').remove();
 		}
+	}
 
 		function updateQueue(id, required, error) {
 			if (!inQueue(id)) {
@@ -224,13 +237,10 @@
 		}
 
 		function inQueue(id) {
-			var in_queue = false;
 			for(var f in uploadifies) {
-				if (uploadifies[f].id == id) {
-					in_queue = true;
-				}
+				if (uploadifies[f].id == id) return true;
 			}
-			return in_queue;
+			return false;
 		}
 
 	});
