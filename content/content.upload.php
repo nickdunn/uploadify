@@ -17,8 +17,7 @@
 		public function __viewIndex() {
 			
 			$sm = new SectionManager($this->_Parent);
-			$section_id = $sm->fetchIDFromHandle($_GET['section']);
-			$section = $sm->fetch($section_id);
+			$section = $sm->fetch($sm->fetchIDFromHandle($_GET['section']));
 			
 			$field_id = $_GET['field'];
 			
@@ -35,7 +34,7 @@
 			$processData = $upload_field->processRawFieldData($_FILES['Filedata'], $status, $message);
 			if ($status != Field::__OK__) die($status . '|' . $message);
 			
-			echo(Field::__OK__);
+			echo(Field::__OK__ . '|' . $processData['file']);
 			die;
 		}
 	}

@@ -94,8 +94,8 @@
 				},
 
 				onComplete: function(event, queueId, fileObj, response, data) {
-					if (response == '100') {
-						file.append('<input type="hidden" name="' + input.attr('name') + '" value="' + fileObj.filePath.replace(/\/workspace/,'') + '" />');
+					if (response.split('|')[0] == '100') {
+						file.append('<input type="hidden" name="' + input.attr('name') + '" value="' + response.split('|')[1].replace(/\/workspace/,'') + '" />');
 						registerComplete(i);
 					} else {
 						var message = response.split('|')[1];
