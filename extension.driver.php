@@ -7,12 +7,11 @@
 		public function about() {
 			return array(
 				'name'			=> 'Uploadify',
-				'version'		=> '1.000',
-				'release-date'	=> '2009-02-26',
+				'version'		=> '0.4',
+				'release-date'	=> '2010-01-05',
 				'author'		=> array(
 					'name'			=> 'Nick Dunn',
-					'website'		=> 'http://airlock.com/',
-					'email'			=> 'nick.dunn@airlock.com'
+					'website'		=> 'http://airlock.com/'
 				),
 				'description'	=> 'Add an upload progress bar to file uploads.'
 			);
